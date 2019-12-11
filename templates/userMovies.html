@@ -17,6 +17,7 @@
 			<th>Genre</th>
 			<th>Rating</th>
 			<th>Released</th>
+			<th>Delete</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -26,6 +27,22 @@
 				<td><h2> {{ item.genre }}</h2></td>
 				<td><h2> {{ item.rating }}</h2></td>
 				<td><h2> {{ item.released }}</h2></td>
+				<td>
+					<form method="POST" action="/delete/{{item._id}}">
+						<button>Delete</button>
+					</form>
+				</td>
+				<td>
+					{% if item.watched == 'true' %}
+					<form method="POST" action="/unwatched/{{item._id}}">
+						<button>Unwatch</button>
+					</form>
+					{% else %}
+					<form method="POST" action="/watched/{{item._id}}">
+						<button>Watch</button>
+					</form>
+					{% endif %}
+				</td>
 			</tr>
 		{% endfor %}
 		</tbody>

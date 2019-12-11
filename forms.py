@@ -11,3 +11,6 @@ class addMovieForm(FlaskForm):
 
 class searchMovieForm(FlaskForm):
 	movieTitle = StringField('movieTitle')
+
+class deleteMovieForm(FlaskForm):
+	movieTitle = StringField('movieTitle')

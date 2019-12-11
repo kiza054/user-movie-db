@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect
-from forms import addMovieForm, searchMovieForm
+from forms import addMovieForm, searchMovieForm, deleteMovieForm
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -31,11 +31,25 @@ def addMovie():
 @app.route('/searchMovie', methods=['GET','POST'])
 def searchMovie():
     form = searchMovieForm()
-
     if form.validate_on_submit():
         result = mongo.db.userMovies.find({'title':{'$regex':form.movieTitle.data}})
         return render_template('userMovies.html', favMovies=result)
     return render_template('searchMovie.html', form=form)
+
+@app.route('/delete/<id>', methods=['POST'])
+def delete_movie(id):
+    mongo.db.userMovies.delete_one({'_id': id})
+    return redirect('/')
+
+@app.route('/watched/<id>', methods=['POST'])
+def watch_movie(id):
+    mongo.db.userMovies.update({'_id': id},{'$set':{'watched': 'true'}})
+    return redirect('/')
+
+@app.route('/unwatched/<id>', methods=['POST'])
+def unwatch_movie(id):
+    mongo.db.userMovies.update({'_id': id},{'$set':{'watched': 'false'}})
+    return redirect('/')
     
 if __name__ == '__main__':
     app.run(debug=True, port=5000, host='127.0.0.1')
